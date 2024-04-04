@@ -1,10 +1,11 @@
+// setting up library's for the code 
 #include <Wire.h>
 #include <SparkFun_Qwiic_OpenLog_Arduino_Library.h>
 #include <SPI.h>
 #include <SD.h>
 #include <SparkFun_LPS25HB_Arduino_Library.h> // Click here to get the library: http://librarymanager/All#SparkFun_LPS25HB
 
-LPS25HB sensor;
+
 Sd2Card card;
 SdVolume volume;
 SdFile root;
