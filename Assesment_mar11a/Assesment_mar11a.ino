@@ -3,25 +3,25 @@
 #include <SparkFun_Qwiic_OpenLog_Arduino_Library.h>
 #include <SPI.h>
 #include <SD.h>
-#include <SparkFun_LPS25HB_Arduino_Library.h> // Click here to get the library: http://librarymanager/All#SparkFun_LPS25HB
+#include <SparkFun_LPS25HB_Arduino_Library.h> 
 
-
+//TEACHER COMMENTS what do these lines of code do?
 Sd2Card card;
 SdVolume volume;
 SdFile root;
-
-
 OpenLog sdCard; // create instance 
+
+//TEACHER COMMENTS what about this one?
 const String Bottle_rocket_reading = "SD.sensor_reading_storage";
+
 void setup() {
  Serial.begin(9600);
- 
-  Serial.println("LPS25HB Sensor Example 1 - Basic Readings");
-  Serial.println();
-
   Wire.begin();
-sensor.begin(); // Begin links an I2C port and I2C address to the sensor, sets an I2C speed, begins I2C on the main board, and then sets default settings
+sensor.begin(); 
+//TEACHER COMMENTS shouldn't you set up the sdCard?
 
+ 
+ //TEACHER COMMENTS what does this chunk of code do? adjust its error message to something you would say
   if (sensor.isConnected() == false) // The library supports some different error codes such as "DISCONNECTED"
   {
     Serial.println("LPS25HB disconnected. Reset the board to try again.");     // Alert the user that the device cannot be reached
@@ -31,16 +31,20 @@ sensor.begin(); // Begin links an I2C port and I2C address to the sensor, sets a
     while (1)
       ;
   }
+//TEACHER COMMENTS any sdcard checks to do?
 
+ 
 }
 
 void loop()
 {
+ //TEACHER COMMENTS what does this chunk of code do?
   Serial.print("current preassure: ");
   Serial.print(sensor.getPressure_hPa());  // getting the tempature reading in hPa
   sdCard.print(", Current tempature (C degrees): ");
   Serial.println(sensor.getTemperature_degC()); // geting the tempature in degrees 
 
+ //TEACHER COMMENTS what about these? check if they make a file that looks like the csv example on classroom
     sdCard.print("current preassure: ");
   sdCard.print(sensor.getPressure_hPa());  // getting the tempature reading in hPa
   sdCard.print(", Current tempature (C degrees): ");
