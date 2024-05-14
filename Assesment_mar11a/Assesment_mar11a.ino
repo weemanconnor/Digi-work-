@@ -43,21 +43,31 @@ void setup()
 void loop()
 {
 
+ launching(false); // false= debug/true = launch
+ delay(5000);
+}
+
+void launch (bool launch);
+if (launch){
+
+    sdCard.println("current preassure: ");
+  sdCard.println(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
+  sdCard.println(", Current tempature (°C):");
+  sdCard.println(Sensor.getTemperature_degC()); // geting the tempature in degrees 
+  sdCard.syncFile();
+delay(400); // waiting 40 miliseconds so that we can goet a good reading like 16, 14, 11, 9 insted of 16, 16, 16, 16, 14, 14, 14, 14, 14, 14, 
+}
+
+else {
 
  //TEACHER COMMENTS what does this chunk of code do?
   Serial.println("current preassure: ");
   Serial.println(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-  sdCard.println(", Current tempature (C degrees): ");
+  Serial.println(", Current tempature (°C):");
   Serial.println(Sensor.getTemperature_degC()); // geting the tempature in degrees 
-
- //TEACHER COMMENTS what about these? check if they make a file that looks like the csv example on classroom
-    sdCard.println("current preassure: ");
-  sdCard.println(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-  sdCard.println(", Current tempature (C degrees): ");
-  sdCard.println(Sensor.getTemperature_degC()); // geting the tempature in degrees 
-
-delay(40); // waiting 40 miliseconds so that we can goet a good reading like 16, 14, 11, 9 insted of 16, 16, 16, 16, 14, 14, 14, 14, 14, 14, 
+  sdCard.syncFile();
 }
+
 
 
 
