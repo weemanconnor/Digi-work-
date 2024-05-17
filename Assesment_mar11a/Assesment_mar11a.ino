@@ -1,67 +1,64 @@
-// setting up library's for the code 
-#include <Wire.h>
-#include <SparkFun_Qwiic_OpenLog_Arduino_Library.h>
-#include <SPI.h>
-#include <SD.h>
-#include <SparkFun_LPS25HB_Arduino_Library.h> 
+#include <Wire.h>                                    // setting up the wire.h library
+#include <SparkFun_Qwiic_OpenLog_Arduino_Library.h>  // setting up the sparkfun openlog library
+#include <SPI.h>                                     // setting up the SPI.h library
+#include <SD.h>                                      // setting up the SD.h library
+#include <SparkFun_LPS25HB_Arduino_Library.h>        // setting up the LPS25HB library
 
-//These lines of code create an instance.
-LPS25HB Sensor; 
-Sd2Card card;
-SdVolume volume;
-SdFile root;
-OpenLog sdCard;  
+LPS25HB Sensor;  // this code is creating an instance linking the LPS25HB to the Sensor
+OpenLog sdCard;  // this code links the Openlog instance to sdCard
+const int DELAYCG = 1000;
+const String FILENAME = "sensorLogCG.txt";  // stringing the file name to "sensorLogcg.txt" so if i call FILENAME it will Make the file that name
 
-const byte tempaturesensor = 3;
-const byte chipinput = 5;
-//TEACHER COMMENTS what about this one?
-const String FILENAME = "sensorLogCG.txt";
-//setting up the 
-
-void setup() 
+void setup()  // setup code not in the loop this code runs once
 {
- Serial.begin(9600);
- Sensor.begin(); 
- sdCard.begin();
- Wire.begin();
+  Serial.begin(9600);
+  Sensor.begin();
+  sdCard.begin();
+  Wire.begin();
 
- //Serial.println("run Mylog/sdCard append file testing");
+  //Serial.println("run Mylog/sdCard append file testing");
+  byte status = sdCard.getStatus();
+  sdCard.append(FILENAME);
+  sdCard.syncFile();
+  Serial.println("Serial monitor testing check");
+  sdCard.println("pressure , tempature");
 
- sdCard.append(FILENAME);
- sdCard.syncFile();
- Serial.println("Done!");
- sdCard.println("pressure , tempature");
- sdCard.syncFile();
 
-
- //TEACHER COMMENTS what does this chunk of code do? adjust its error message to something you would say
-  if (Sensor.isConnected() == false) // if tyhe sensor is not connected desplay this error message in the serial monitor
+  //TEACHER COMMENTS what does this chunk of code do? adjust its error message to something you would say
+  if (Sensor.isConnected() == false)  // if tyhe sensor is not connected desplay this error message in the serial monitor
   {
-    Serial.println("Sensor is disconnected plug in and restart.");     
-    while (1);
+    Serial.println("Sensor is disconnected plug in and restart.");
+    while (1)
+      ;
+  } else {
+    Serial.println("Sensor has been plugged in printing values.");
+  }
+  if (status == 0xFF) {
+    Serial.println("sdCard is disconnected plug in and restart.");
+    while (1)
+      ;
+  } else {
+    Serial.println("sdCard has been plugged in saving values");
   }
 }
-void loop()
-{
- launch(true); // false= debug/true = launch
+
+
+void loop() {
+  launch(false);  // false= debug/true = launch
 }
 
-void launch (bool launch){
- if (launch == true){
-
-  sdCard.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-    sdCard.print(",");  
-  sdCard.println(Sensor.getTemperature_degC()); // geting the tempature in degrees 
-  sdCard.syncFile();
-
-}else {
- //TEACHER COMMENTS what does this chunk of code do?
-  Serial.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-  Serial.print(",");
-  Serial.println(Sensor.getTemperature_degC()); // geting the tempature in degrees  
+//
+void launch(bool launch) {
+  if (launch == true) {
+    sdCard.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
+    sdCard.print(",");
+    sdCard.println(Sensor.getTemperature_degC());  // geting the tempature in degrees
+    delay(DELAYCG);
+    sdCard.syncFile();
+  } else {
+    //TEACHER COMMENTS what does this chunk of code do?
+    Serial.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
+    Serial.print(",");
+    Serial.println(Sensor.getTemperature_degC());  // geting the tempature in degrees
+  }
 }
-}
-
-
-
-
