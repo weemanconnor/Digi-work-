@@ -11,34 +11,32 @@ const String FILENAME = "sensorLogCG.txt";  // stringing the file name to "senso
 
 void setup()  // setup code not in the loop this code runs once
 {
-  Serial.begin(9600);
-  Sensor.begin();
-  sdCard.begin();
-  Wire.begin();
+  Serial.begin(9600);// 
+  Sensor.begin();// initialising the 1-wire data bus 
+  sdCard.begin();// begin the log to store the data 
+  Wire.begin();// initilising the wire so that we can  use I2C
 
-  //Serial.println("run Mylog/sdCard append file testing");
-  byte status = sdCard.getStatus();
-  sdCard.append(FILENAME);
-  sdCard.syncFile();
-  Serial.println("Serial monitor testing check");
-  sdCard.println("pressure , tempature");
+  byte status = sdCard.getStatus(); // getting the status of the sdCard to later use to find if its plugged in or not 
+  sdCard.append(FILENAME); // grabing the file name from the string sensorLogCG.TXT
+  sdCard.syncFile(); // sync everything so far to the sd card 
+  Serial.println("Serial monitor testing check"); // print to the serial monitor to test if its working 
+  sdCard.println("pressure , tempature"); // print to the sdCard to set up the titles for CSV
 
 
-  //TEACHER COMMENTS what does this chunk of code do? adjust its error message to something you would say
-  if (Sensor.isConnected() == false)  // if tyhe sensor is not connected desplay this error message in the serial monitor
+  if (Sensor.isConnected() == false)  // if the sensor is not connected desplay this error message in the serial monitor
   {
-    Serial.println("Sensor is disconnected plug in and restart.");
+    Serial.println("Sensor is disconnected plug in and restart."); //print to the serial monitor stating that the sensor is disconnected 
     while (1)
       ;
   } else {
-    Serial.println("Sensor has been plugged in printing values.");
+    Serial.println("Sensor has been plugged in printing values."); // if the sensor is connected print snesor plugged in printing values 
   }
-  if (status == 0xFF) {
+  if (status == 0xFF) { // grabing the status and if its this value print the sdCard is disconnected
     Serial.println("sdCard is disconnected plug in and restart.");
     while (1)
       ;
   } else {
-    Serial.println("sdCard has been plugged in saving values");
+    Serial.println("sdCard has been plugged in saving values"); // if the sdCard gets plugged in print been plugged in saving values
   }
 }
 
@@ -49,16 +47,15 @@ void loop() {
 
 //
 void launch(bool launch) {
-  if (launch == true) {
+  if (launch == true) {// if the launch value is set to true then run the sensor readings to the sdCard 
     sdCard.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-    sdCard.print(",");
+    sdCard.print(","); //print the , to make sure they are in CSV format 
     sdCard.println(Sensor.getTemperature_degC());  // geting the tempature in degrees
-    delay(DELAYCG);
-    sdCard.syncFile();
+    delay(DELAYCG);// grabing the set delay from the string 
+    sdCard.syncFile();// sync the data to the sdCard 
   } else {
-    //TEACHER COMMENTS what does this chunk of code do?
-    Serial.print(Sensor.getPressure_hPa());  // getting the tempature reading in hPa
-    Serial.print(",");
+    Serial.print(Sensor.getPressure_hPa());  // if the launch value is false then print the sensor values to the serial monitor 
+    Serial.print(",");// print the , to make sure its in CSV format 
     Serial.println(Sensor.getTemperature_degC());  // geting the tempature in degrees
   }
 }
